@@ -14,6 +14,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 3 - Select your new environment from the Palette:Python: Select Interpreter (might need to refresh)
 4 - Install the packages
 python -m pip install matplotlib
+5 - pip freeze > requirements.txt
 """
 import uvicorn
 from fastapi import Depends, FastAPI, params, HTTPException, status
@@ -39,7 +40,7 @@ lst_models = [ModelFromFiles(i) for i in range(1, 5)]
 ypred=(lst_models[0].predict("I am sad and disappointed and unhappy and angry", pkl_stopwords, pkl_tokenizer))
 print(ypred)
 
-#authentication
+#authentication following https://testdriven.io/blog/moving-from-flask-to-fastapi/
 dict_usernames_passwords= {
     'alice': 'wonderland',
     'bob': 'builder',
@@ -66,7 +67,7 @@ def get_username(username: str = Depends(get_current_username)):
 
 @app.get("/")
 async def index():
-    return {'1'}
+    return {'score':'1'}
 
 @app.get("/text_to_sentiment/{text}/{model_index}")
 async def text_to_sentiment(text: str, model_index: int, username: str = Depends(get_current_username)):
@@ -92,7 +93,7 @@ async def text_to_sentiment(text: str, model_index: int, username: str = Depends
             raise TypeError("model_index must be between 1 and 4")
     model = lst_models[model_index-1]
     ypred=(model.predict("I am sad and disappointed and unhappy and angry", pkl_stopwords, pkl_tokenizer))
-    return {str(ypred)}
+    return {"score":str(ypred)}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
