@@ -16,7 +16,7 @@ class ModelFromFiles:
         self.model_index=model_index
         self.pkl_count_vectorizer=None
         self.pkl_model=None
-        self.load_from_pickles_files()
+        self._load_from_pickles_files()
 
     #protected method
     def _load_from_pickles_files(self):

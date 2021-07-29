@@ -16,14 +16,17 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 python -m pip install matplotlib
 """
 import uvicorn
-from fastapi import FastAPI, params
+from fastapi import Depends, FastAPI, params, HTTPException, status
 from pydantic import BaseModel
 from model_to_load import ModelFromFiles
 import nltk
-#from nltk.corpus import stopwords
 import pickle
 from nltk.tokenize import NLTKWordTokenizer
+import secrets
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+
 path='model_pickles'
+app = FastAPI()
 
 #load pickles files pre recorded under Jupyter notebook for nltk english stopwords and nltkwordtokenizer
 with open(f'{path}/stopwords.pkl', 'rb') as handle:
@@ -36,34 +39,54 @@ lst_models = [ModelFromFiles(i) for i in range(1, 5)]
 ypred=(lst_models[0].predict("I am sad and disappointed and unhappy and angry", pkl_stopwords, pkl_tokenizer))
 print(ypred)
 
-app = FastAPI()
+#authentication
+dict_usernames_passwords= {
+    'alice': 'wonderland',
+    'bob': 'builder',
+    'clementine': 'mandarine'
+}
+security = HTTPBasic()
+def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):   
+    """
+    Retrieve the current HTTPBasicCredentials (username/password)
+    And compare with the existing list of key/values in dict_usernames_passwords
+    """
+    try:
+        #compare_digest permits to prevent timing attacks
+        correct_password = secrets.compare_digest(credentials.password, dict_usernames_passwords[credentials.username])
+    except:
+        correct_password = False
+    if not (correct_password):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+    return credentials.username
+
+@app.get("/get_username")
+def get_username(username: str = Depends(get_current_username)):
+    return {"username": username}
 
 @app.get("/")
 async def index():
     return {'1'}
 
-
 @app.get("/text_to_sentiment/{text}/{model_index}")
-async def text_to_sentiment(text: str="I am sad and disappointed and unhappy and angry", model_index: int=1):
+async def text_to_sentiment(text: str, model_index: int, username: str = Depends(get_current_username)):
     """
     Returns the sentiment score
     TEST
-    http://localhost:8000/sentiment/Quinlan/5210/VADER%20is%20smart,%20handsome,%20and%20funny! => compound=0.8439
+    http://localhost:8000/text_to_sentiment/hello world/1
 
     Parameters
     ----------
-    username : str
-        The user name
-    pwd : str
-        The password for this username
     text: str
         The text to analyse
-    model_index: int
-        Index of the model to use (1 to 4)
+    model_index: int between 1 and 4
+        Index of the model to use 
         1=All Branch, 2=HK, 3=California, 4=Paris
     Returns
     -------
-    a sentiment score
+    The prediction score matching the given "text" and using the specific model (as per "model_index")
+    401 if the user is not authenticated
+    TypeError if model_index is incorrect
     """
     if (model_index<1 or model_index>4):
             raise TypeError("model_index must be between 1 and 4")
