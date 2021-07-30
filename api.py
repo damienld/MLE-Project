@@ -16,6 +16,22 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 python -m pip install matplotlib
 5 - pip freeze > requirements.txt
 """
+"""
+DOCKER set up in VScode
+https://towardsdatascience.com/the-nice-way-to-use-docker-with-vscode-f475c49aab1b
+"""
+"""
+AZURE deployment
+https://docs.microsoft.com/en-us/azure/developer/python/tutorial-deploy-containers-01
+1 - Publish youor docker image to Azure Registry: https://code.visualstudio.com/docs/containers/tutorial-django-push-to-registry
+- CTR SHIFT P >> Docker: Push
+2 - You should see your container under Docker left tab > Registries > Azure > MyAzuresubscription > MyRegistry > myimagename
+Right click on the deeper level > Deploy Image to Azure App Service ...
+3 - définir WEBSITES_PORT, basculez vers l’explorateur Azure : App Service
+, développez le nœud de votre nouveau service d’application (actualisez si nécessaire)
+, puis cliquez avec le bouton droit sur Paramètres de l’application et sélectionnez Ajouter un nouveau paramètre. 
+Quand vous y êtes invité, entrez WEBSITES_PORT comme clé et le numéro de port(expl: 8000) comme valeur.
+"""
 import uvicorn
 from fastapi import Depends, FastAPI, params, HTTPException, status
 from pydantic import BaseModel

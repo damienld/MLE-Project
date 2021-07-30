@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/b4e98f3e-61fc-44cd-a3bc-2b85d1e91266/resourceGroups/Sport/providers/Microsoft.Web/sites/disneyreviews",
+    "appService.deploySubpath": "."
+}
