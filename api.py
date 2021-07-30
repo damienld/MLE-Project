@@ -29,7 +29,7 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials
 path='model_pickles'
 app = FastAPI()
 
-#load pickles files pre recorded under Jupyter notebook for nltk english stopwords and nltkwordtokenizer
+#LOAD pickles files pre recorded under Jupyter notebook for nltk english stopwords and nltkwordtokenizer
 with open(f'{path}/stopwords.pkl', 'rb') as handle:
     pkl_stopwords = pickle.load(handle)
 with open(f'{path}/NLTKWordTokenizer.pkl', 'rb') as handle:
@@ -37,10 +37,10 @@ with open(f'{path}/NLTKWordTokenizer.pkl', 'rb') as handle:
 
 #load all 4 models (1=All Branch, 2=HK, 3=California, 4=Paris)
 lst_models = [ModelFromFiles(i) for i in range(1, 5)]
-ypred=(lst_models[0].predict("I am sad and disappointed and unhappy and angry", pkl_stopwords, pkl_tokenizer))
-print(ypred)
+#ypred=(lst_models[0].predict("I am sad and disappointed and unhappy and angry", pkl_stopwords, pkl_tokenizer))
+#print(ypred)
 
-#authentication following https://testdriven.io/blog/moving-from-flask-to-fastapi/
+#AUTHENTICATION following https://testdriven.io/blog/moving-from-flask-to-fastapi/
 dict_usernames_passwords= {
     'alice': 'wonderland',
     'bob': 'builder',
@@ -65,10 +65,12 @@ def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
 def get_username(username: str = Depends(get_current_username)):
     return {"username": username}
 
+#INDEX()
 @app.get("/")
 async def index():
     return {'score':'1'}
 
+#TEXT_TO_SENTIMENT()
 @app.get("/text_to_sentiment/{text}/{model_index}")
 async def text_to_sentiment(text: str, model_index: int, username: str = Depends(get_current_username)):
     """
