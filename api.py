@@ -21,9 +21,9 @@ DOCKER set up in VScode
 https://towardsdatascience.com/the-nice-way-to-use-docker-with-vscode-f475c49aab1b
 """
 """
-AZURE deployment
+AZURE FIRST deployment
 https://docs.microsoft.com/en-us/azure/developer/python/tutorial-deploy-containers-01
-1 - Publish youor docker image to Azure Registry: https://code.visualstudio.com/docs/containers/tutorial-django-push-to-registry
+1 - Publish your docker image to Azure Registry: https://code.visualstudio.com/docs/containers/tutorial-django-push-to-registry
 - CTR SHIFT P >> Docker: Push
 2 - You should see your container under Docker left tab > Registries > Azure > MyAzuresubscription > MyRegistry > myimagename
 Right click on the deeper level > Deploy Image to Azure App Service ...
@@ -31,6 +31,10 @@ Right click on the deeper level > Deploy Image to Azure App Service ...
 , développez le nœud de votre nouveau service d’application (actualisez si nécessaire)
 , puis cliquez avec le bouton droit sur Paramètres de l’application et sélectionnez Ajouter un nouveau paramètre. 
 Quand vous y êtes invité, entrez WEBSITES_PORT comme clé et le numéro de port(expl: 8000) comme valeur.
+AZURE update deployment
+
+
+https://disneyreviews.azurewebsites.net/docs#/default/text_to_sentiment_text_to_sentiment__text___model_index__get
 """
 import uvicorn
 from fastapi import Depends, FastAPI, params, HTTPException, status
@@ -53,9 +57,12 @@ with open(f'{path}/NLTKWordTokenizer.pkl', 'rb') as handle:
 
 #load all 4 models (1=All Branch, 2=HK, 3=California, 4=Paris)
 lst_models = [ModelFromFiles(i) for i in range(1, 5)]
-#ypred=(lst_models[0].predict("I am sad and disappointed and unhappy and angry", pkl_stopwords, pkl_tokenizer))
-#print(ypred)
-
+"""
+ypred=(lst_models[0].predict("honest went disneyland 6 year old daughter n't expecting much fun adult boy wrong.the park 25 minutes taxi hotel kowloon also get train purchased tickets several weeks hand online meant reservation code. simply went kiosk machine typed number tickets. definately way buy tickets purchased ticket park would waited long line.the park small means. spent day certainly n't get every ride. park clean well laidf out. surprise food drinks reasonably priced.the negative think rides wait time 45 minutes.the rides world class great time fact tink disneyland clearly highlight us whilst hong kong.whether children must visit attraction", pkl_stopwords, pkl_tokenizer))
+print("result must be 5:" + str(ypred))
+ypred=(lst_models[0].predict("came child 1987 wife decided bring 8 year old niece trip minnesota disneyland. since could one day purchased single day passes $ 95 adults $ 85 her. parking additional $ 18 massive ramp shuttled main gate. standing line nearly 40 minutes purchase tickets finally park. picked map planned route first stopping space mountain. line allegedly 40 minutes long waited 70 minutes get ride. handy app get smartphone lists wait times many rides plan attack accordingly. found wait times major rides underestimated least 15 minutes.food expensive tourist traps. hot dogs around $ 7 la carte soft drinks $ 4. communication employees poor. rides would go offline numerous people line nothing would announced. people would standing line take picture character character would leave without patrons told would return all. disneyland amusement park steroids know got right claws. kids go local amusement park state next three four summers price paying one trip disney", pkl_stopwords, pkl_tokenizer))
+print("result must be 2:" + str(ypred))
+"""
 #AUTHENTICATION following https://testdriven.io/blog/moving-from-flask-to-fastapi/
 dict_usernames_passwords= {
     'alice': 'wonderland',
@@ -110,7 +117,7 @@ async def text_to_sentiment(text: str, model_index: int, username: str = Depends
     if (model_index<1 or model_index>4):
             raise TypeError("model_index must be between 1 and 4")
     model = lst_models[model_index-1]
-    ypred=(model.predict("I am sad and disappointed and unhappy and angry", pkl_stopwords, pkl_tokenizer))
+    ypred=(model.predict(text, pkl_stopwords, pkl_tokenizer))
     return {"score":str(ypred)}
 
 if __name__ == "__main__":
