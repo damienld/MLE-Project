@@ -31,13 +31,14 @@ Right click on the deeper level > Deploy Image to Azure App Service ...
 , développez le nœud de votre nouveau service d’application (actualisez si nécessaire)
 , puis cliquez avec le bouton droit sur Paramètres de l’application et sélectionnez Ajouter un nouveau paramètre. 
 Quand vous y êtes invité, entrez WEBSITES_PORT comme clé et le numéro de port(expl: 8000) comme valeur.
+
 AZURE update deployment
-
-
+1 - Right Click on "Dockerfile" => Build image in Azure
+2 - Delete the existing Azure app serv
 https://disneyreviews.azurewebsites.net/docs#/default/text_to_sentiment_text_to_sentiment__text___model_index__get
 """
 import uvicorn
-from fastapi import Depends, FastAPI, params, HTTPException, status
+from fastapi import Depends, FastAPI, params, HTTPException, status, Query
 from pydantic import BaseModel
 from model_to_load import ModelFromFiles
 import nltk
@@ -95,27 +96,30 @@ async def index():
 
 #TEXT_TO_SENTIMENT()
 @app.get("/text_to_sentiment/{text}/{model_index}")
-async def text_to_sentiment(text: str, model_index: int, username: str = Depends(get_current_username)):
+async def text_to_sentiment(text: str, model_index: int = Query(..., gt=1, le=4), username: str = Depends(get_current_username)):
     """
-    Returns the sentiment score
-    TEST
+    Test
+    ----
     http://localhost:8000/text_to_sentiment/hello world/1
 
     Parameters
     ----------
-    text: str
+    - **text**: str
         The text to analyse
-    model_index: int between 1 and 4
+    - **model_index**: int between 1 and 4
         Index of the model to use 
         1=All Branch, 2=HK, 3=California, 4=Paris
+
     Returns
     -------
-    The prediction score matching the given "text" and using the specific model (as per "model_index")
+    Returns the prediction score matching the given "text" and using the specific model (as per "model_index")
     401 if the user is not authenticated
     TypeError if model_index is incorrect
     """
-    if (model_index<1 or model_index>4):
-            raise TypeError("model_index must be between 1 and 4")
+    #value directly checked by Query() in the definition of the parameters(above line)
+    #but still need to manage the exception
+    if (model_index not in [1,2,3,4]):
+        raise HTTPException(status_code=404, detail="model_index must be an integer between 1 and 4")
     model = lst_models[model_index-1]
     ypred=(model.predict(text, pkl_stopwords, pkl_tokenizer))
     return {"score":str(ypred)}
@@ -124,6 +128,7 @@ if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
 """
+VSCODE DEBUGGING
 in Visual Studio Code, you can:
 
 Go to the "Debug" panel.
