@@ -3,6 +3,7 @@ from sklearn.ensemble import RandomForestClassifier
 from enum import IntEnum
 
 path='model_pickles'
+model_scores=[0.61,0.48,0.65,0.45]
 
 #ENUM https://docs.python.org/3/library/enum.html
 class EnumModel(IntEnum):
@@ -30,6 +31,7 @@ class ModelFromFiles:
         #    raise TypeError("model_index must be between 1 and 4")
         self.model_name= enum_model.name
         self.model_index=enum_model.value
+        self.model_score=model_scores[enum_model.value-1]
         self.pkl_count_vectorizer=None
         self.pkl_model=None
         self._load_from_pickles_files()
