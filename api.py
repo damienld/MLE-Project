@@ -33,6 +33,8 @@ Right click on the deeper level > Deploy Image to Azure App Service ...
 Quand vous y êtes invité, entrez WEBSITES_PORT comme clé et le numéro de port(expl: 8000) comme valeur.
 
 AZURE update deployment
+under Docker left tab > Registries > Azure > MyAzuresubscription > MyRegistry > myimagename
+Right click on the deeper level > Deploy Image to Azure App Service ...
 1 - Right Click on "Dockerfile" => Build image in Azure
 2 - Delete the existing Azure app serv
 https://disneyreviews.azurewebsites.net/docs#/default/text_to_sentiment_text_to_sentiment__text___model_index__get
