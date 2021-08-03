@@ -40,7 +40,7 @@ https://disneyreviews.azurewebsites.net/docs#/default/text_to_sentiment_text_to_
 import uvicorn
 from fastapi import Depends, FastAPI, params, HTTPException, status, Query
 from pydantic import BaseModel
-from model_to_load import ModelFromFiles
+from model_to_load import ModelFromFiles, EnumModel
 import nltk
 import pickle
 from nltk.tokenize import NLTKWordTokenizer
@@ -57,7 +57,8 @@ with open(f'{path}/NLTKWordTokenizer.pkl', 'rb') as handle:
     pkl_tokenizer = pickle.load(handle)
 
 #load all 4 models (1=All Branch, 2=HK, 3=California, 4=Paris)
-lst_models = [ModelFromFiles(i) for i in range(1, 5)]
+lst_models = ModelFromFiles.load_all_models_to_list()
+
 """
 ypred=(lst_models[0].predict("honest went disneyland 6 year old daughter n't expecting much fun adult boy wrong.the park 25 minutes taxi hotel kowloon also get train purchased tickets several weeks hand online meant reservation code. simply went kiosk machine typed number tickets. definately way buy tickets purchased ticket park would waited long line.the park small means. spent day certainly n't get every ride. park clean well laidf out. surprise food drinks reasonably priced.the negative think rides wait time 45 minutes.the rides world class great time fact tink disneyland clearly highlight us whilst hong kong.whether children must visit attraction", pkl_stopwords, pkl_tokenizer))
 print("result must be 5:" + str(ypred))
@@ -87,6 +88,10 @@ def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
 
 @app.get("/get_username")
 def get_username(username: str = Depends(get_current_username)):
+    """
+    Used to check the authentication is correct
+    Returns the **username** of the currently authenticated user
+    """
     return {"username": username}
 
 #INDEX()
@@ -94,9 +99,13 @@ def get_username(username: str = Depends(get_current_username)):
 async def index():
     return {'score':'1'}
 
+class SentimentRequest(BaseModel):
+    text: str
+    model: EnumModel
 #TEXT_TO_SENTIMENT()
-@app.get("/text_to_sentiment/{text}/{model_index}")
-async def text_to_sentiment(text: str, model_index: int = Query(..., gt=1, le=4), username: str = Depends(get_current_username)):
+@app.post("/text_to_sentiment/")
+async def text_to_sentiment(request: SentimentRequest #text: str, model: int = Query(..., gt=1, le=4)
+, username: str = Depends(get_current_username)):
     """
     Test
     ----
@@ -118,6 +127,9 @@ async def text_to_sentiment(text: str, model_index: int = Query(..., gt=1, le=4)
     """
     #value directly checked by Query() in the definition of the parameters(above line)
     #but still need to manage the exception
+    model_index = request.model.value
+    text = request.text
+    #not needed anymore with Enum as the value can't be out of range
     if (model_index not in [1,2,3,4]):
         raise HTTPException(status_code=404, detail="model_index must be an integer between 1 and 4")
     model = lst_models[model_index-1]

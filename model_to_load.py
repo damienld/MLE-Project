@@ -1,7 +1,15 @@
 import pickle
 from sklearn.ensemble import RandomForestClassifier
+from enum import IntEnum
 
 path='model_pickles'
+
+#ENUM https://docs.python.org/3/library/enum.html
+class EnumModel(IntEnum):
+    AllBranch = 1
+    HK = 2
+    California = 3
+    Paris = 4 
 
 class ModelFromFiles:
     """
@@ -9,11 +17,19 @@ class ModelFromFiles:
     model{i}.pkl
     count_vectorizer{i}.pkl
     """
-    def __init__(self, model_index):#, count_vectorizer, model):
-        if (model_index<1 or model_index>4):
-            raise TypeError("model_index must be between 1 and 4")
-        self.name= ""
-        self.model_index=model_index
+    @staticmethod
+    def load_all_models_to_list():
+        """
+        Load all models
+        Returns a list of ModelFromFiles
+        """
+        return [ModelFromFiles(enum_model) for enum_model in (EnumModel)]
+
+    def __init__(self, enum_model: EnumModel):#, count_vectorizer, model):
+        #if (model_index<1 or model_index>4):
+        #    raise TypeError("model_index must be between 1 and 4")
+        self.model_name= enum_model.name
+        self.model_index=enum_model.value
         self.pkl_count_vectorizer=None
         self.pkl_model=None
         self._load_from_pickles_files()
