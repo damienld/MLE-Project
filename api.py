@@ -37,6 +37,7 @@ AZURE update deployment
 2 - Delete the existing Azure app serv
 https://disneyreviews.azurewebsites.net/docs#/default/text_to_sentiment_text_to_sentiment__text___model_index__get
 """
+from pydantic.types import Json
 import uvicorn
 from fastapi import Depends, FastAPI, params, HTTPException, status, Query
 from pydantic import BaseModel
@@ -87,7 +88,7 @@ def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):
     return credentials.username
 
 @app.get("/get_username")
-def get_username(username: str = Depends(get_current_username)):
+async def get_username(username: str = Depends(get_current_username)):
     """
     Used to check the authentication is correct
     Returns the **username** of the currently authenticated user
@@ -99,12 +100,24 @@ def get_username(username: str = Depends(get_current_username)):
 async def index():
     return {'score':'1'}
 
+#MODELS PERFS
+@app.get("/get_performance")
+async def get_performance(modelindex: EnumModel):
+    """
+    Returns the ***name*** and the **score** of the selected model
+    """
+    model_index = modelindex.value
+    model = lst_models[model_index-1]
+    return {"model": model.model_name, "score": model.model_score}
+
+#TEXT_TO_SENTIMENT()
 class SentimentRequest(BaseModel):
     text: str
     model: EnumModel
-#TEXT_TO_SENTIMENT()
+
 @app.post("/text_to_sentiment/")
-async def text_to_sentiment(request: SentimentRequest #text: str, model: int = Query(..., gt=1, le=4)
+async def text_to_sentiment(request: SentimentRequest 
+#text: str, model: int = Query(..., gt=1, le=4)
 , username: str = Depends(get_current_username)):
     """
     Test
@@ -130,8 +143,8 @@ async def text_to_sentiment(request: SentimentRequest #text: str, model: int = Q
     model_index = request.model.value
     text = request.text
     #not needed anymore with Enum as the value can't be out of range
-    if (model_index not in [1,2,3,4]):
-        raise HTTPException(status_code=404, detail="model_index must be an integer between 1 and 4")
+    #if (model_index not in [1,2,3,4]):
+    #    raise HTTPException(status_code=404, detail="model_index must be an integer between 1 and 4")
     model = lst_models[model_index-1]
     ypred=(model.predict(text, pkl_stopwords, pkl_tokenizer))
     return {"score":str(ypred)}
