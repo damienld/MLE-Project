@@ -1,10 +1,10 @@
 version: '3.4'
-
 services:
   mleproject:
-    image: mleproject
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    ports:
-      - 8000:8000
+    image: dami1ld/mleproject:latest
+    network_mode: host
+  mleproject_test:
+    depends_on:
+      - mleproject
+    image: dami1ld/mleprojecttest:latest
+    network_mode: host
