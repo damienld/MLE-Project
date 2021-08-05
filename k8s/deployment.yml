@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mle-deployment
+  labels:
+    app: mle-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mle-api
+  template:
+    metadata:
+      labels:
+        app: myle-api
+    spec:
+      containers:
+      - name: mle-api
+        image: dami1ld/mleproject:latest
+        ports:
+        - containerPort: 8000

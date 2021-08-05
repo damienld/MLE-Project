@@ -27,8 +27,6 @@ class ModelFromFiles:
         return [ModelFromFiles(enum_model) for enum_model in (EnumModel)]
 
     def __init__(self, enum_model: EnumModel):#, count_vectorizer, model):
-        #if (model_index<1 or model_index>4):
-        #    raise TypeError("model_index must be between 1 and 4")
         self.model_name= enum_model.name
         self.model_index=enum_model.value
         self.model_score=model_scores[enum_model.value-1]
@@ -53,6 +51,3 @@ class ModelFromFiles:
         X_text=[self.preprocess(text, pkl_stopwords, pkl_tokenizer)]
         X_test_cv = self.pkl_count_vectorizer.transform(X_text)
         return self.pkl_model.predict(X_test_cv)
-
-    
-

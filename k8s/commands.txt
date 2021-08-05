@@ -1,0 +1,10 @@
+kubectl create -f deployment.yml
+kubectl get deployment
+( if needed: ) kubect delete deployments mle-deployment
+
+kubectl create -f service.yml
+kubectl get deployment
+( if needed: ) kubect delete service mle-service
+
+kubectl create -f ingress.yml
+kubectl get ingress
