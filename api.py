@@ -57,21 +57,20 @@ with open(f'{path}/stopwords.pkl', 'rb') as handle:
 with open(f'{path}/NLTKWordTokenizer.pkl', 'rb') as handle:
     pkl_tokenizer = pickle.load(handle)
 
-#load all 4 models (1=All Branch, 2=HK, 3=California, 4=Paris)
+#LOAD all 4 models (1=All Branch, 2=HK, 3=California, 4=Paris)
 lst_models = ModelFromFiles.load_all_models_to_list()
 
-"""
-ypred=(lst_models[0].predict("honest went disneyland 6 year old daughter n't expecting much fun adult boy wrong.the park 25 minutes taxi hotel kowloon also get train purchased tickets several weeks hand online meant reservation code. simply went kiosk machine typed number tickets. definately way buy tickets purchased ticket park would waited long line.the park small means. spent day certainly n't get every ride. park clean well laidf out. surprise food drinks reasonably priced.the negative think rides wait time 45 minutes.the rides world class great time fact tink disneyland clearly highlight us whilst hong kong.whether children must visit attraction", pkl_stopwords, pkl_tokenizer))
-print("result must be 5:" + str(ypred))
-ypred=(lst_models[0].predict("came child 1987 wife decided bring 8 year old niece trip minnesota disneyland. since could one day purchased single day passes $ 95 adults $ 85 her. parking additional $ 18 massive ramp shuttled main gate. standing line nearly 40 minutes purchase tickets finally park. picked map planned route first stopping space mountain. line allegedly 40 minutes long waited 70 minutes get ride. handy app get smartphone lists wait times many rides plan attack accordingly. found wait times major rides underestimated least 15 minutes.food expensive tourist traps. hot dogs around $ 7 la carte soft drinks $ 4. communication employees poor. rides would go offline numerous people line nothing would announced. people would standing line take picture character character would leave without patrons told would return all. disneyland amusement park steroids know got right claws. kids go local amusement park state next three four summers price paying one trip disney", pkl_stopwords, pkl_tokenizer))
-print("result must be 2:" + str(ypred))
-"""
-#AUTHENTICATION following https://testdriven.io/blog/moving-from-flask-to-fastapi/
 dict_usernames_passwords= {
     'alice': 'wonderland',
     'bob': 'builder',
     'clementine': 'mandarine'
 }
+
+#AUTHENTICATION following https://testdriven.io/blog/moving-from-flask-to-fastapi/
+"""
+FastAPI natively supports a number of security and authentication tools via the fastapi.security package. 
+With a few lines of code, you can add basic HTTP authentication to your application
+"""
 security = HTTPBasic()
 def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):   
     """
