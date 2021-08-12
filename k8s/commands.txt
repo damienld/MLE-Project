@@ -8,3 +8,14 @@ kubectl get deployment
 
 kubectl create -f ingress.yml
 kubectl get ingress
+
+CONSOLE1:
+minikube start
+minikube dashboard --url=true
+(can be closed then)
+CONSOLE2:
+kubectl proxy --address='0.0.0.0' --disable-filter=true
+
+http://54.194.241.188:8001/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/#/pod?namespace=default
+http://54.194.241.188:8001/api/v1/namespaces/default/services/mle-service/proxy/
+http://54.194.241.188:8001/api/v1/namespaces/default/services/mle-service/proxy/get_performance?modelindex=1
