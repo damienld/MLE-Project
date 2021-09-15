@@ -1,4 +1,4 @@
-name: Run MLE Project Unit Tests
+name: Run MLE-Project Unit Tests
 on:
   push:
     branches:
