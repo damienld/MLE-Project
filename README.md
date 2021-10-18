@@ -25,5 +25,5 @@ Mon travaille est décrit ici
 <br>
 [version FR](https://github.com/damienld/MLE-Project/blob/main/Documentation%20MLE%20projet.pdf)<br>
 [version EN](https://github.com/damienld/MLE-Project/blob/main/Documentation%20MLE%20projet_EN.pdf)<br>
-Et l'API tourne [ici] (https://disneyreviews.azurewebsites.net/docs#/) (nécessite quelques minutes pour lancer le conteneur au premier appel)
+Et l'API tourne [ici](https://disneyreviews.azurewebsites.net/docs#/) (nécessite quelques minutes pour lancer le conteneur au premier appel)
 
