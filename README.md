@@ -23,7 +23,7 @@ On pourra enfin créer un fichier de déploiement ainsi qu'un Service et un Ingr
 ## Présentation du Projet délivré<br>
 Mon travaille est décrit ici
 <br>
-FR ![FR](https://github.com/damienld/Rakuteam/blob/main/MLEProject/Documentation%20MLE%20projet.pdf)<br>
-EN ![EN](https://github.com/damienld/Rakuteam/blob/main/MLEProject/Documentation%20MLE%20projet_EN.pdf)<br>
-Et l'API tourne [ici] (https://disneyreviews.azurewebsites.net/)(nécessite quelques minutes pour lancer le conteneur au premier appel)
+FR ![FR](https://github.com/damienld/MLE-Project/blob/main/MLEProject/Documentation%20MLE%20projet.pdf)<br>
+EN ![EN](https://github.com/damienld/MLE-Project/blob/main/MLEProject/Documentation%20MLE%20projet_EN.pdf)<br>
+Et l'API tourne [ici] (https://disneyreviews.azurewebsites.net/) (nécessite quelques minutes pour lancer le conteneur au premier appel)
 
