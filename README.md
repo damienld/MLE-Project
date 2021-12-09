@@ -21,7 +21,7 @@ Une série de tests devra être créée pour tester l'API contenairisée. On pou
 On pourra enfin créer un fichier de déploiement ainsi qu'un Service et un Ingress avec Kubernetes pour permettre le déploiement de l'API sur au moins 3 Pods.
 <br><br>
 ## Présentation du Projet délivré<br>
-Mon travaille est décrit ici
+Mon travail est décrit ici
 <br>
 [version FR](https://github.com/damienld/MLE-Project/blob/main/Documentation%20MLE%20projet.pdf)<br>
 [version EN](https://github.com/damienld/MLE-Project/blob/main/Documentation%20MLE%20projet_EN.pdf)<br>
